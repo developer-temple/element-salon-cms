@@ -1,26 +1,24 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const logger = require('morgan');
 
 const contactRoutes = require('./routes/contact');
 const contentRoutes = require('./routes/content');
 const productsRoutes = require('./routes/products');
 const servicesRoutes = require('./routes/services');
 
-// const Post = require('./models/post');
-
 const app = express();
 
-// mongoose.connect('mongodb+srv://temple:u9puw8a5vwPa0Bd5@cluster0-qcafs.mongodb.net/node-angular?retryWrites=true&w=majority', { useNewUrlParser: true })
-// .then(() => {
-//   console.log('Connected to database.');
-// })
-// .catch(() => {
-//   console.error('Database connection failed');
-// })
+mongoose.connect(`mongodb+srv://developer-temple:y3NMhWUcBjlLb969@elementsaloncmscluster-ny7zi.mongodb.net/element-salon?retryWrites=true&w=majority`, { useNewUrlParser: true })
+.then(() => {
+  console.log('Connected to database.');
+})
+.catch(() => {
+  console.error('Database connection failed');
+})
 
-app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: false }));
+app.use(logger('dev'));
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -29,9 +27,11 @@ app.use((req, res, next) => {
   next();
 })
 
-app.use('/contact', contactRoutes);
-app.use('/content', contentRoutes);
-app.use('/products', productsRoutes);
-app.use('/services', servicesRoutes);
+app.use(bodyParser.json());
+
+app.use('/api/contact', contactRoutes);
+app.use('/api/content', contentRoutes);
+app.use('/api/products', productsRoutes);
+app.use('/api/services', servicesRoutes);
 
 module.exports = app;
